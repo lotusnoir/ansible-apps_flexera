@@ -1,0 +1,8 @@
+---
+flexera_version: "2.3.1"
+flexera_source_file: "~/DEV/sys_ansible/shared-files/flexera/ADVA_Embedded_License_Server_R{{ flexera_version }}_unix64.tgz"
+
+flexera_user: flexnetls
+flexera_group: flexnetls
+flexera_install_dir: "/opt"
+flexera_force_install: false

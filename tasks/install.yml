@@ -1,0 +1,78 @@
+---
+- name: "Check for flexera binary"
+  stat:
+    path: '{{ flexera_install_dir }}/els'
+  changed_when: false
+  register: flexera_binary
+
+- when: not flexera_binary.stat.exists or flexera_force_install
+  block:
+    - name: create flexera group
+      group:
+        name: "{{ flexera_group }}"
+        system: true
+
+    - name: create flexera user
+      user:
+        name: "{{ flexera_user }}"
+        group: "{{ flexera_group }}"
+        create_home: true
+        system: true
+
+    - name: Create a directory if it does not exist
+      file:
+        path: "{{ flexera_install_dir }}"
+        owner: "{{ flexera_user }}"
+        group: "{{ flexera_group }}"
+        state: directory
+        mode: '0755'
+      register: create_dir
+
+    - name: Unarchive package in folder
+      unarchive:
+        src: "{{ flexera_source_file }}"
+        dest: "{{ flexera_install_dir }}"
+        owner: "{{ flexera_user }}"
+        group: "{{ flexera_group }}"
+      when: create_dir.changed
+
+    - name: install flexera
+      command: "{{ flexera_install_dir }}/els install"
+
+    # - name: "execute command restorecon"
+    #   shell: |
+    #     /sbin/restorecon -v {{ flexera_install_dir }}/apache-tomcat/bin/startup.sh
+    #     /sbin/restorecon -v {{ flexera_install_dir }}/jre/bin/java
+    #
+    # - name: "execute command ausearch"
+    #   shell: |
+    #     ausearch -c '(artup.sh)' --raw | audit2allow -M els-artupsh
+    #     ausearch -c '(java)' --raw | audit2allow -M els-java
+    #
+    # - name: "execute command semodule"
+    #   shell: |
+    #     semodule -i els-artupsh.pp
+    #     semodule -i els-java.pp
+
+    - name: "Open firewall ports"
+      firewalld:
+        port: "{{ item }}"
+        permanent: true
+        state: enabled
+      #ignore_errors: true
+      notify: reload firewalld
+      with_items:
+        - 8081/tcp
+        - 7071/tcp
+
+- name: Enable flexnetls-advaoptc
+  service:
+    name: flexnetls-advaoptc
+    state: started
+    enabled: true
+
+- name: Enable flexnetls-manager
+  service:
+    name: flexnetls-manager
+    state: started
+    enabled: true
