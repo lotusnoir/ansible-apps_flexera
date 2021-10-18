@@ -1,30 +1,27 @@
-# Ansible Role: ansible-apps_flexera
+# ansible-apps_flexera
 
 ## Description
 
-[![Build Status](https://travis-ci.com/lotusnoir/ansible-apps_flexera.svg?branch=master?style=flat)](https://travis-ci.com/lotusnoir/ansible-apps_flexera)
-[![License](https://img.shields.io/badge/license-Apache--2.0-brightgreen?style=flat)](https://opensource.org/licenses/Apache-2.0)
-[![Ansible Role](https://img.shields.io/badge/galaxy-apps_flexera-purple?style=flat)](https://galaxy.ansible.com/lotusnoir/apps_flexera)
+[![Galaxy Role](https://img.shields.io/badge/galaxy-apps_flexera-purple?style=flat)](https://galaxy.ansible.com/lotusnoir/apps_flexera)
+[![Version](https://img.shields.io/github/release/lotusnoir/ansible-apps_flexera.svg)](https://github.com/lotusnoir/ansible-apps_flexera/releases/latest)
 ![GitHub repo size](https://img.shields.io/github/repo-size/lotusnoir/ansible-apps_flexera?color=orange&style=flat)
-![Ansible Quality Score](https://img.shields.io/ansible/quality/52300)
-[![downloads](https://img.shields.io/ansible/role/d/52300)](https://galaxy.ansible.com/lotusnoir/apps_flexera)
-[![Version](https://img.shields.io/github/release/lotusnoir/ansible-apps_flexera.svg)](https://github.com/lotusnoir/ansible-apps_flexera/releases/)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=lotusnoir_ansible-apps_flexera&metric=alert_status)](https://sonarcloud.io/dashboard?id=lotusnoir_ansible-apps_flexera)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=lotusnoir_ansible-apps_flexera&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=lotusnoir_ansible-apps_flexera)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=lotusnoir_ansible-apps_flexera&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=lotusnoir_ansible-apps_flexera)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=lotusnoir_ansible-apps_flexera&metric=security_rating)](https://sonarcloud.io/dashboard?id=lotusnoir_ansible-apps_flexera)
+[![downloads](https://img.shields.io/ansible/role/d/56092)](https://galaxy.ansible.com/lotusnoir/apps_flexera)
+![Ansible Quality Score](https://img.shields.io/ansible/quality/56092)
+[![License](https://img.shields.io/badge/license-Apache--2.0-brightgreen?style=flat)](https://opensource.org/licenses/Apache-2.0)
 
 Deploy [flexera](https://adva.com/) the ADVA license server.
 
 ## Role variables
 
-| Name           | Default Value | Description                        |
-| -------------- | ------------- | -----------------------------------|
-| `flexera_version` | 0.3.2 | flexera version |
-| `flexera_install_dir` | /usr/local/bin | directory to install binary |
-| `flexera_force_install` | false | force install variable |
-| `flexera_user` | admin | prism user |
-| `flexera_group` | admin | prism user |
+| Name                    | Default Value | Description                        |
+| ----------------------- | ------------- | -----------------------------------|
+| `flexera_version`       | 2.3.1         | flexera version |
+| `flexera_source_file`   | ""            | application package |
+| `flexera_install_dir`   | /opt          | installation directory |
+| `flexera_force_install` | false         | force install variable |
+| `flexera_user`          | flexnetls     | prism user |
+| `flexera_group`         | flexnetls     | prism user |
+| `flexera_config_firewalld` | true    | Open port on firewalld |
 
 ## Examples
 

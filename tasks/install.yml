@@ -38,6 +38,7 @@
 
     - name: install flexera
       command: "{{ flexera_install_dir }}/els install"
+      when: create_dir.changed
 
     # - name: "execute command restorecon"
     #   shell: |
@@ -64,6 +65,7 @@
       with_items:
         - 8081/tcp
         - 7071/tcp
+      when: flexera_config_firewalld
 
 - name: Enable flexnetls-advaoptc
   service:
