@@ -5,6 +5,16 @@
   changed_when: false
   register: flexera_binary
 
+- name: Check if source_file exists
+  stat:
+    path: "{{ flexera_source_file }}"
+  delegate_to: localhost
+  register: source_file
+
+- name: Source file doesnt exist, we stop playing
+  meta: end_host
+  when: not source_file.stat.exists
+
 - when: not flexera_binary.stat.exists or flexera_force_install
   block:
     - name: create flexera group

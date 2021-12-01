@@ -11,32 +11,26 @@
 
 Deploy [flexera](https://adva.com/) the ADVA license server.
 
+## Requirements
+
+none
+
 ## Role variables
 
-| Name                    | Default Value | Description                        |
-| ----------------------- | ------------- | -----------------------------------|
-| `flexera_version`       | 2.3.1         | flexera version |
-| `flexera_source_file`   | ""            | application package |
-| `flexera_install_dir`   | /opt          | installation directory |
-| `flexera_force_install` | false         | force install variable |
-| `flexera_user`          | flexnetls     | prism user |
-| `flexera_group`         | flexnetls     | prism user |
-| `flexera_config_firewalld` | true    | Open port on firewalld |
+See [variables](/defaults/main.yml) for more details.
 
 ## Examples
 
-	---
-	- hosts: apps_flexera
-	  become: yes
-	  become_method: sudo
-	  gather_facts: yes
-	  roles:
-	    - role: ansible-apps_flexera
-	  environment: 
-	    http_proxy: "{{ http_proxy }}"
-	    https_proxy: "{{ https_proxy }}"
-	    no_proxy: "{{ no_proxy }}
+        ---
+        - hosts: apps_flexera
+          become: true
+          become_method: sudo
+          gather_facts: true
+          roles:
+            - role: ansible-apps_flexera
+
 
 ## License
 
 This project is licensed under Apache License. See [LICENSE](/LICENSE) for more details.
+
