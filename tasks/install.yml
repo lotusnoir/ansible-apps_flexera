@@ -1,36 +1,37 @@
 ---
 - name: "Check for flexera binary"
-  stat:
+  ansible.builtin.stat:
     path: '{{ flexera_install_dir }}/els'
   changed_when: false
   register: flexera_binary
 
-- name: Check if source_file exists
-  stat:
+- name: "Check if source_file exists"
+  ansible.builtin.stat:
     path: "{{ flexera_source_file }}"
   delegate_to: localhost
   register: source_file
 
-- name: Source file doesnt exist, we stop playing
-  meta: end_host
+- name: "Source file doesnt exist, we stop playing"
+  ansible.builtin.meta: end_host
   when: not source_file.stat.exists
 
-- when: not flexera_binary.stat.exists or flexera_force_install
+- name: "Install tasks"
+  when: not flexera_binary.stat.exists or flexera_force_install
   block:
     - name: create flexera group
-      group:
+      ansible.builtin.group:
         name: "{{ flexera_group }}"
         system: true
 
-    - name: create flexera user
-      user:
+    - name: "Create flexera user"
+      ansible.builtin.user:
         name: "{{ flexera_user }}"
         group: "{{ flexera_group }}"
         create_home: true
         system: true
 
-    - name: Create a directory if it does not exist
-      file:
+    - name: "Create a directory if it does not exist"
+      ansible.builtin.file:
         path: "{{ flexera_install_dir }}"
         owner: "{{ flexera_user }}"
         group: "{{ flexera_group }}"
@@ -38,16 +39,16 @@
         mode: '0755'
       register: create_dir
 
-    - name: Unarchive package in folder
-      unarchive:
+    - name: "Unarchive package in folder"
+      ansible.builtin.unarchive:
         src: "{{ flexera_source_file }}"
         dest: "{{ flexera_install_dir }}"
         owner: "{{ flexera_user }}"
         group: "{{ flexera_group }}"
       when: create_dir.changed
 
-    - name: install flexera
-      command: "{{ flexera_install_dir }}/els install"
+    - name: "Install flexera"
+      ansible.builtin.command: "{{ flexera_install_dir }}/els install"
       when: create_dir.changed
 
     # - name: "execute command restorecon"
@@ -66,7 +67,7 @@
     #     semodule -i els-java.pp
 
     - name: "Open firewall ports"
-      firewalld:
+      ansible.builtin.firewalld:
         port: "{{ item }}"
         permanent: true
         state: enabled
@@ -77,14 +78,14 @@
         - 7071/tcp
       when: flexera_config_firewalld
 
-- name: Enable flexnetls-advaoptc
-  service:
+- name: "Enable flexnetls-advaoptc"
+  ansible.builtin.service:
     name: flexnetls-advaoptc
     state: started
     enabled: true
 
-- name: Enable flexnetls-manager
-  service:
+- name: "Enable flexnetls-manager"
+  ansible.builtin.service:
     name: flexnetls-manager
     state: started
     enabled: true
