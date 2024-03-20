@@ -18,7 +18,7 @@
 - name: "Install tasks"
   when: not flexera_binary.stat.exists or flexera_force_install
   block:
-    - name: create flexera group
+    - name: Create flexera group
       ansible.builtin.group:
         name: "{{ flexera_group }}"
         system: true
@@ -45,11 +45,12 @@
         dest: "{{ flexera_install_dir }}"
         owner: "{{ flexera_user }}"
         group: "{{ flexera_group }}"
-      when: create_dir.changed
+        #when: create_dir.changed
 
     - name: "Install flexera"
       ansible.builtin.command: "{{ flexera_install_dir }}/els install"
-      when: create_dir.changed
+      changed_when: create_dir.changed
+      #when: create_dir.changed
 
     # - name: "execute command restorecon"
     #   shell: |
@@ -67,12 +68,11 @@
     #     semodule -i els-java.pp
 
     - name: "Open firewall ports"
-      ansible.builtin.firewalld:
+      ansible.posix.firewalld:
         port: "{{ item }}"
         permanent: true
         state: enabled
-      #ignore_errors: true
-      notify: reload firewalld
+      notify: Reload firewalld
       with_items:
         - 8081/tcp
         - 7071/tcp
